@@ -27,22 +27,27 @@
             <input type="radio" name="theme" value="winter">
             Winter
           </label>
+          <label>
+            <input type="radio" name="theme" value="fire">
+            Feuer
+          </label>
+          <label>
+            <input type="radio" name="theme" value="autumn">
+            Herbst
+          </label>
+          <label>
+            <input type="radio" name="theme" value="sahara">
+            Sahara
+          </label>
         </div>
       </div>
       <div class="setup-section">
-        <label>Kopf wählen:</label>
-        <div class="head-select">
-          <label>
-            <input type="radio" name="birdhead" value="Birdhead.png" checked>
-            <img src="Birdhead.png" alt="Sophian" class="head-preview">
-            Sopian
-          </label>
-          <label>
-            <input type="radio" name="birdhead" value="aslikopf.png">
-            <img src="aslikopf.png" alt="Asli" class="head-preview">
-            Asli
-          </label>
-        </div>
+        <label for="birdheadSelect">Kopf wählen:</label>
+        <select id="birdheadSelect">
+          <option value="Birdhead.png" selected>Sopian</option>
+          <option value="aslikopf.png">Asli</option>
+        </select>
+        <div id="headPreviewBox" style="margin-top: 8px;"></div>
       </div>
       <button id="startBtn">Spiel starten</button>
     </div>
