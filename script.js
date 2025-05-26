@@ -19,7 +19,7 @@ let loopId = null;
 // ==== BILDER ====
 // ACHTUNG: Groß-/Kleinschreibung und Ordnerstruktur GENAU beachten!
 const birdImg = new Image();
-birdImg.src = 'Images/Birdhead.png';
+birdImg.src = 'Birdhead.png';
 
 // ==== DEKO-ARRAYS ====
 const clouds = [];
