@@ -4,7 +4,7 @@ let currentBird = "Birdhead.png";
 let birdImg = new Image();
 birdImg.src = currentBird;
 
-// ==== NEU: Theme-Dropdown ====
+// ==== Theme-Dropdown ====
 const themeSelect = document.getElementById('themeSelect');
 
 // ==== SPIEL-KONSTANTEN ====
@@ -52,7 +52,7 @@ const setupOverlay = document.getElementById('setupOverlay');
 const startBtn = document.getElementById('startBtn');
 const headRadios = document.querySelectorAll('input[name="birdhead"]');
 
-// Startknopf
+// ==== Spielstart: Theme & Kopf setzen ====
 startBtn.addEventListener('click', () => {
   currentTheme = themeSelect.value;
   headRadios.forEach(radio => { if (radio.checked) currentBird = radio.value; });
