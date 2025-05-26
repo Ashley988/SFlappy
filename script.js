@@ -31,7 +31,7 @@ const flames = [];
 const leaves = [];
 const heartPath = "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z";
 
-// Sahara
+// Sahara-Deko
 const dunes = [
   {x: 30, w: 120, h: 20, c: "#e5bb63"},
   {x: 130, w: 110, h: 24, c: "#e9d387"},
@@ -49,21 +49,12 @@ let birdY, birdVelocity, pipes, score, highscore, gap, lives, gameOver, started,
 const setupOverlay = document.getElementById('setupOverlay');
 const startBtn = document.getElementById('startBtn');
 const themeRadios = document.querySelectorAll('input[name="theme"]');
-const birdheadSelect = document.getElementById('birdheadSelect');
-const headPreviewBox = document.getElementById('headPreviewBox');
-
-// Birdhead Dropdown Vorschau
-birdheadSelect.addEventListener('change', function() {
-  const file = birdheadSelect.value;
-  headPreviewBox.innerHTML = `<img src="${file}" alt="Vorschau" style="width:34px;height:34px;border-radius:50%;border:1.5px solid #eee;background:#f8f8f8;">`;
-});
-window.addEventListener('DOMContentLoaded', function() {
-  headPreviewBox.innerHTML = `<img src="Birdhead.png" alt="Vorschau" style="width:34px;height:34px;border-radius:50%;border:1.5px solid #eee;background:#f8f8f8;">`;
-});
+// Radio-Auswahl für Birdhead (mit Bild)
+const headRadios = document.querySelectorAll('input[name="birdhead"]');
 
 startBtn.addEventListener('click', () => {
   themeRadios.forEach(radio => { if (radio.checked) currentTheme = radio.value; });
-  currentBird = birdheadSelect.value;
+  headRadios.forEach(radio => { if (radio.checked) currentBird = radio.value; });
   birdImg.src = currentBird;
   setupOverlay.style.display = "none";
   initGame();
@@ -415,23 +406,16 @@ function gameLoop() {
     ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
     ctx.fillStyle = "#7ecfff";
     ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-
-    // Wolken
     if (frameCount % 46 === 0) spawnCloud();
     clouds.forEach(c => { drawCloud(c); c.x -= c.speed; });
     while (clouds.length && clouds[0].x + clouds[0].size < 0) clouds.shift();
-
-    // Blumen
     if (frameCount % 33 === 0) spawnFlower();
     flowers.forEach(f => { drawFlower(f); f.x -= f.speed; });
     while (flowers.length && flowers[0].x + flowers[0].size < 0) flowers.shift();
-
   } else if (currentTheme === "galaxy") {
     ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
     ctx.fillStyle = "#0a1846";
     ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-
-    // Sterne und Sternschnuppen
     if (frameCount % 12 === 0) spawnStar();
     stars.forEach(s => {
       drawStar(s);
@@ -439,13 +423,10 @@ function gameLoop() {
       if (s.shooting) s.y += 0.17 * s.tail;
     });
     while (stars.length && (stars[0].x + stars[0].radius < 0 || stars[0].y > GAME_HEIGHT + 40)) stars.shift();
-
   } else if (currentTheme === "winter") {
     ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
     ctx.fillStyle = "#aee5ff";
     ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-
-    // Schnee
     if (frameCount % 2 === 0) spawnSnowflake();
     snowflakes.forEach(s => {
       drawSnowflake(s);
@@ -453,7 +434,6 @@ function gameLoop() {
       s.y += s.speedY;
     });
     while (snowflakes.length && snowflakes[0].y > GAME_HEIGHT + 10) snowflakes.shift();
-
   } else if (currentTheme === "fire") {
     ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
     ctx.fillStyle = "#3d0900";
@@ -461,7 +441,6 @@ function gameLoop() {
     if (frameCount % 5 === 0) spawnFlame();
     flames.forEach(f => { drawFlame(f); f.y -= f.speed; });
     while (flames.length && flames[0].y + flames[0].height < 0) flames.shift();
-
   } else if (currentTheme === "autumn") {
     ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
     ctx.fillStyle = "#fbe3c3";
@@ -474,7 +453,6 @@ function gameLoop() {
       l.angle += l.spin;
     });
     while (leaves.length && leaves[0].y > GAME_HEIGHT + 14) leaves.shift();
-
   } else if (currentTheme === "sahara") {
     ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
     drawSaharaBackground();
