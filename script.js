@@ -27,7 +27,20 @@ const clouds = [];
 const flowers = [];
 const stars = [];
 const snowflakes = [];
+const flames = [];
+const leaves = [];
 const heartPath = "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z";
+
+// Sahara
+const dunes = [
+  {x: 30, w: 120, h: 20, c: "#e5bb63"},
+  {x: 130, w: 110, h: 24, c: "#e9d387"},
+  {x: 200, w: 60, h: 12, c: "#d8a23c"},
+];
+const pyramids = [
+  {x: 70, y: 340, s: 56, c: "#d9bc67"},
+  {x: 180, y: 370, s: 38, c: "#cfa04a"}
+];
 
 // ==== SPIELVARIABLEN ====
 let birdY, birdVelocity, pipes, score, highscore, gap, lives, gameOver, started, frameCount, isBlinking;
@@ -36,12 +49,21 @@ let birdY, birdVelocity, pipes, score, highscore, gap, lives, gameOver, started,
 const setupOverlay = document.getElementById('setupOverlay');
 const startBtn = document.getElementById('startBtn');
 const themeRadios = document.querySelectorAll('input[name="theme"]');
-const headRadios = document.querySelectorAll('input[name="birdhead"]');
+const birdheadSelect = document.getElementById('birdheadSelect');
+const headPreviewBox = document.getElementById('headPreviewBox');
+
+// Birdhead Dropdown Vorschau
+birdheadSelect.addEventListener('change', function() {
+  const file = birdheadSelect.value;
+  headPreviewBox.innerHTML = `<img src="${file}" alt="Vorschau" style="width:34px;height:34px;border-radius:50%;border:1.5px solid #eee;background:#f8f8f8;">`;
+});
+window.addEventListener('DOMContentLoaded', function() {
+  headPreviewBox.innerHTML = `<img src="Birdhead.png" alt="Vorschau" style="width:34px;height:34px;border-radius:50%;border:1.5px solid #eee;background:#f8f8f8;">`;
+});
 
 startBtn.addEventListener('click', () => {
-  // Theme & Bird auswählen
   themeRadios.forEach(radio => { if (radio.checked) currentTheme = radio.value; });
-  headRadios.forEach(radio => { if (radio.checked) currentBird = radio.value; });
+  currentBird = birdheadSelect.value;
   birdImg.src = currentBird;
   setupOverlay.style.display = "none";
   initGame();
@@ -97,6 +119,8 @@ function initGame() {
   flowers.length = 0;
   stars.length = 0;
   snowflakes.length = 0;
+  flames.length = 0;
+  leaves.length = 0;
   spawnPipe();
   showJumpBtn(true);
   showNewGameBtn(false);
@@ -225,6 +249,97 @@ function drawSnowflake(s) {
   ctx.restore();
 }
 
+// Feuer (Flammen)
+function spawnFlame() {
+  flames.push({
+    x: Math.random() * GAME_WIDTH,
+    y: GAME_HEIGHT - 30,
+    height: 24 + Math.random() * 30,
+    speed: 1.7 + Math.random(),
+    opacity: 0.35 + Math.random() * 0.4
+  });
+}
+function drawFlame(f) {
+  ctx.save();
+  ctx.globalAlpha = f.opacity;
+  let grd = ctx.createLinearGradient(f.x, f.y, f.x, f.y - f.height);
+  grd.addColorStop(0, "#ffd200");
+  grd.addColorStop(0.4, "#ff9300");
+  grd.addColorStop(0.7, "#ff4b1f");
+  grd.addColorStop(1, "#3d0900");
+  ctx.beginPath();
+  ctx.ellipse(f.x, f.y, 16, f.height, 0, 0, 2 * Math.PI);
+  ctx.fillStyle = grd;
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
+// Herbst (Blätter)
+function spawnLeaf() {
+  leaves.push({
+    x: Math.random() * GAME_WIDTH,
+    y: -12,
+    speedY: 1.1 + Math.random() * 1.5,
+    speedX: Math.random() * 1.2 - 0.6,
+    size: 14 + Math.random() * 8,
+    color: ["#ff9900", "#e58c35", "#f8c65f", "#ad5800", "#fd8d36"][Math.floor(Math.random()*5)],
+    angle: Math.random() * Math.PI * 2,
+    spin: (Math.random() - 0.5) * 0.09
+  });
+}
+function drawLeaf(l) {
+  ctx.save();
+  ctx.translate(l.x, l.y);
+  ctx.rotate(l.angle);
+  ctx.beginPath();
+  ctx.ellipse(0, 0, l.size*0.42, l.size*0.24, 0, 0, 2*Math.PI);
+  ctx.fillStyle = l.color;
+  ctx.shadowBlur = 4;
+  ctx.shadowColor = "#b33";
+  ctx.fill();
+  ctx.restore();
+}
+
+// Sahara (Sand, Pyramiden)
+function drawSaharaBackground() {
+  // Himmel
+  ctx.fillStyle = "#fef6b0";
+  ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+  // Dünen
+  dunes.forEach(d => {
+    ctx.beginPath();
+    ctx.moveTo(d.x, GAME_HEIGHT);
+    ctx.lineTo(d.x + d.w, GAME_HEIGHT);
+    ctx.lineTo(d.x + d.w / 2, GAME_HEIGHT - d.h);
+    ctx.closePath();
+    ctx.fillStyle = d.c;
+    ctx.globalAlpha = 0.7;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  });
+  // Pyramiden
+  pyramids.forEach(p => {
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y + p.s);
+    ctx.lineTo(p.x + p.s / 2, p.y);
+    ctx.lineTo(p.x + p.s, p.y + p.s);
+    ctx.closePath();
+    ctx.fillStyle = p.c;
+    ctx.strokeStyle = "#bb9833";
+    ctx.lineWidth = 2;
+    ctx.globalAlpha = 0.93;
+    ctx.fill();
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  });
+  // Sandvordergrund
+  ctx.fillStyle = "#fff7b7";
+  ctx.globalAlpha = 0.76;
+  ctx.fillRect(0, GAME_HEIGHT - 45, GAME_WIDTH, 45);
+  ctx.globalAlpha = 1;
+}
+
 // ==== LEBEN ====
 function drawLives() {
   const livesDiv = document.getElementById('lives');
@@ -310,6 +425,7 @@ function gameLoop() {
     if (frameCount % 33 === 0) spawnFlower();
     flowers.forEach(f => { drawFlower(f); f.x -= f.speed; });
     while (flowers.length && flowers[0].x + flowers[0].size < 0) flowers.shift();
+
   } else if (currentTheme === "galaxy") {
     ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
     ctx.fillStyle = "#0a1846";
@@ -323,6 +439,7 @@ function gameLoop() {
       if (s.shooting) s.y += 0.17 * s.tail;
     });
     while (stars.length && (stars[0].x + stars[0].radius < 0 || stars[0].y > GAME_HEIGHT + 40)) stars.shift();
+
   } else if (currentTheme === "winter") {
     ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
     ctx.fillStyle = "#aee5ff";
@@ -336,6 +453,31 @@ function gameLoop() {
       s.y += s.speedY;
     });
     while (snowflakes.length && snowflakes[0].y > GAME_HEIGHT + 10) snowflakes.shift();
+
+  } else if (currentTheme === "fire") {
+    ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+    ctx.fillStyle = "#3d0900";
+    ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+    if (frameCount % 5 === 0) spawnFlame();
+    flames.forEach(f => { drawFlame(f); f.y -= f.speed; });
+    while (flames.length && flames[0].y + flames[0].height < 0) flames.shift();
+
+  } else if (currentTheme === "autumn") {
+    ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+    ctx.fillStyle = "#fbe3c3";
+    ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+    if (frameCount % 6 === 0) spawnLeaf();
+    leaves.forEach(l => {
+      drawLeaf(l);
+      l.x += l.speedX;
+      l.y += l.speedY;
+      l.angle += l.spin;
+    });
+    while (leaves.length && leaves[0].y > GAME_HEIGHT + 14) leaves.shift();
+
+  } else if (currentTheme === "sahara") {
+    ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+    drawSaharaBackground();
   }
 
   // Weißer Rahmen
@@ -441,4 +583,4 @@ function gameLoop() {
   }
 
   frameCount++;
-} 
+}
