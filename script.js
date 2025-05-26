@@ -1,3 +1,7 @@
+// ==== EINSTELLUNGEN UND STATE ====
+let currentTheme = "spring";
+let currentBird = "Birdhead.png";
+
 // ==== SPIEL-KONSTANTEN ====
 const GAME_WIDTH = 320;
 const GAME_HEIGHT = 480;
@@ -16,38 +20,35 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 let loopId = null;
 
-// ==== BILDER ====
-const birdImg = new Image();
-birdImg.src = 'Birdhead.png';
+// ==== BILDER (Birdheads) ====
+let birdImg = new Image();
+birdImg.src = currentBird;
 
-// ==== DEKO-ARRAYS ====
+// ==== DEKO-OBJEKTE ====
 const clouds = [];
 const flowers = [];
+const stars = [];
+const snowflakes = [];
 const heartPath = "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z";
 
 // ==== SPIELVARIABLEN ====
 let birdY, birdVelocity, pipes, score, highscore, gap, lives, gameOver, started, frameCount, isBlinking;
 
-// ==== INIT-FUNKTION ====
-function initGame() {
-  birdY = GAME_HEIGHT / 2 - BIRD_SIZE / 2;
-  birdVelocity = 0;
-  pipes = [];
-  score = 0;
-  gap = INITIAL_GAP;
-  lives = MAX_LIVES;
-  gameOver = false;
-  started = false;
-  frameCount = 0;
-  isBlinking = false;
-  document.getElementById('score').textContent = score;
-  drawLives();
-  clouds.length = 0;
-  flowers.length = 0;
-  spawnPipe();
-  showJumpBtn(true);
-  showNewGameBtn(false);
-}
+// ==== SETUP OVERLAY ====
+const setupOverlay = document.getElementById('setupOverlay');
+const startBtn = document.getElementById('startBtn');
+const themeRadios = document.querySelectorAll('input[name="theme"]');
+const headRadios = document.querySelectorAll('input[name="birdhead"]');
+
+startBtn.addEventListener('click', () => {
+  // Theme & Bird auswählen
+  themeRadios.forEach(radio => { if (radio.checked) currentTheme = radio.value; });
+  headRadios.forEach(radio => { if (radio.checked) currentBird = radio.value; });
+  birdImg.src = currentBird;
+  setupOverlay.style.display = "none";
+  initGame();
+  loopId = requestAnimationFrame(gameLoop);
+});
 
 // ==== HIGHSCORE ====
 if (localStorage.getItem('bird_highscore')) {
@@ -80,7 +81,30 @@ function showNewGameBtn(show) {
   newGameBtn.style.display = show ? 'inline-block' : 'none';
 }
 
-// ==== SPRINGEN / RESET ====
+// ==== SPIEL-RESET ====
+function initGame() {
+  birdY = GAME_HEIGHT / 2 - BIRD_SIZE / 2;
+  birdVelocity = 0;
+  pipes = [];
+  score = 0;
+  gap = INITIAL_GAP;
+  lives = MAX_LIVES;
+  gameOver = false;
+  started = false;
+  frameCount = 0;
+  isBlinking = false;
+  document.getElementById('score').textContent = score;
+  drawLives();
+  clouds.length = 0;
+  flowers.length = 0;
+  stars.length = 0;
+  snowflakes.length = 0;
+  spawnPipe();
+  showJumpBtn(true);
+  showNewGameBtn(false);
+}
+
+// ==== SPRINGEN ====
 function jump() {
   if (!started && !gameOver) {
     started = true;
@@ -94,7 +118,8 @@ function jump() {
   }
 }
 
-// ==== DEKORATION ====
+// ==== DEKO-FUNKTIONEN ====
+// Frühling
 function spawnCloud() {
   clouds.push({
     x: GAME_WIDTH + Math.random() * 40,
@@ -102,15 +127,6 @@ function spawnCloud() {
     size: 35 + Math.random() * 25,
     speed: 0.6 + Math.random() * 0.4,
     opacity: 0.62 + Math.random() * 0.33
-  });
-}
-function spawnFlower() {
-  flowers.push({
-    x: GAME_WIDTH + Math.random() * 50,
-    y: GAME_HEIGHT - 24 - Math.random() * 12,
-    size: 14 + Math.random() * 10,
-    speed: 1 + Math.random(),
-    color: `hsl(${Math.random()*360},85%,65%)`
   });
 }
 function drawCloud(c) {
@@ -122,6 +138,15 @@ function drawCloud(c) {
   ctx.fill();
   ctx.globalAlpha = 1;
   ctx.restore();
+}
+function spawnFlower() {
+  flowers.push({
+    x: GAME_WIDTH + Math.random() * 50,
+    y: GAME_HEIGHT - 24 - Math.random() * 12,
+    size: 14 + Math.random() * 10,
+    speed: 1 + Math.random(),
+    color: `hsl(${Math.random()*360},85%,65%)`
+  });
 }
 function drawFlower(f) {
   ctx.save();
@@ -143,6 +168,67 @@ function drawFlower(f) {
   ctx.restore();
 }
 
+// Galaxy
+function spawnStar() {
+  // Stern oder Sternschnuppe
+  let isShooting = Math.random() < 0.11;
+  stars.push({
+    x: GAME_WIDTH + (isShooting ? Math.random()*60 : 0),
+    y: Math.random() * (GAME_HEIGHT - 100),
+    radius: isShooting ? 2 : 1 + Math.random() * 2,
+    speed: isShooting ? 4.5 + Math.random()*3 : 0.8 + Math.random() * 1.2,
+    color: isShooting ? "#fffbe3" : (Math.random()<0.5 ? "#fff" : "#ffe47a"),
+    shooting: isShooting,
+    tail: isShooting ? 32 + Math.random()*18 : 0
+  });
+}
+function drawStar(s) {
+  ctx.save();
+  ctx.globalAlpha = 0.8;
+  ctx.beginPath();
+  ctx.arc(s.x, s.y, s.radius, 0, 2 * Math.PI);
+  ctx.fillStyle = s.color;
+  ctx.shadowBlur = 9;
+  ctx.shadowColor = s.color;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+  if (s.shooting) {
+    // Tail zeichnen
+    ctx.globalAlpha = 0.46;
+    ctx.strokeStyle = "#ffe";
+    ctx.lineWidth = 2.1;
+    ctx.beginPath();
+    ctx.moveTo(s.x, s.y);
+    ctx.lineTo(s.x - s.tail, s.y + s.tail * 0.17);
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
+// Winter
+function spawnSnowflake() {
+  snowflakes.push({
+    x: Math.random() * GAME_WIDTH,
+    y: -8,
+    radius: 2.2 + Math.random() * 2.7,
+    speedY: 1.2 + Math.random() * 1.3,
+    speedX: Math.random() * 1.1 - 0.5
+  });
+}
+function drawSnowflake(s) {
+  ctx.save();
+  ctx.globalAlpha = 0.85;
+  ctx.beginPath();
+  ctx.arc(s.x, s.y, s.radius, 0, 2 * Math.PI);
+  ctx.fillStyle = "#fff";
+  ctx.shadowBlur = 8;
+  ctx.shadowColor = "#fff";
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
 // ==== LEBEN ====
 function drawLives() {
   const livesDiv = document.getElementById('lives');
@@ -152,9 +238,13 @@ function drawLives() {
   }
 }
 
-// ==== ROHR-GENERIERUNG ====
+// ==== ROHR-GENERIERUNG (Lücke immer mittig & exakt!) ====
 function spawnPipe() {
-  const topHeight = Math.floor(Math.random() * (GAME_HEIGHT - gap - 110)) + 35;
+  // Mittige Lücke, kleine zufällige Abweichung nach oben/unten möglich
+  const playArea = GAME_HEIGHT - gap - 60;
+  const offset = (Math.random() - 0.5) * Math.min(playArea * 0.7, 130);
+  const holeCenter = GAME_HEIGHT / 2 + offset;
+  const topHeight = Math.max(30, holeCenter - gap / 2);
   pipes.push({
     x: GAME_WIDTH,
     top: topHeight,
@@ -205,7 +295,6 @@ function drawBirdWithWings(x, y) {
   ctx.stroke();
   ctx.globalAlpha = 1;
   ctx.restore();
-
   ctx.drawImage(birdImg, x, y, BIRD_SIZE, BIRD_SIZE);
 }
 
@@ -213,20 +302,48 @@ function drawBirdWithWings(x, y) {
 function gameLoop() {
   loopId = requestAnimationFrame(gameLoop);
 
-  // Himmel-Hintergrund
-  ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-  ctx.fillStyle = "#7ecfff";
-  ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+  // ==== HINTERGRUND je nach Theme ====
+  if (currentTheme === "spring") {
+    ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+    ctx.fillStyle = "#7ecfff";
+    ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
-  // Wolken
-  if (frameCount % 46 === 0) spawnCloud();
-  clouds.forEach(c => { drawCloud(c); c.x -= c.speed; });
-  while (clouds.length && clouds[0].x + clouds[0].size < 0) clouds.shift();
+    // Wolken
+    if (frameCount % 46 === 0) spawnCloud();
+    clouds.forEach(c => { drawCloud(c); c.x -= c.speed; });
+    while (clouds.length && clouds[0].x + clouds[0].size < 0) clouds.shift();
 
-  // Blumen
-  if (frameCount % 33 === 0) spawnFlower();
-  flowers.forEach(f => { drawFlower(f); f.x -= f.speed; });
-  while (flowers.length && flowers[0].x + flowers[0].size < 0) flowers.shift();
+    // Blumen
+    if (frameCount % 33 === 0) spawnFlower();
+    flowers.forEach(f => { drawFlower(f); f.x -= f.speed; });
+    while (flowers.length && flowers[0].x + flowers[0].size < 0) flowers.shift();
+  } else if (currentTheme === "galaxy") {
+    ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+    ctx.fillStyle = "#0a1846";
+    ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+
+    // Sterne und Sternschnuppen
+    if (frameCount % 12 === 0) spawnStar();
+    stars.forEach(s => {
+      drawStar(s);
+      s.x -= s.speed;
+      if (s.shooting) s.y += 0.17 * s.tail;
+    });
+    while (stars.length && (stars[0].x + stars[0].radius < 0 || stars[0].y > GAME_HEIGHT + 40)) stars.shift();
+  } else if (currentTheme === "winter") {
+    ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+    ctx.fillStyle = "#aee5ff";
+    ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+
+    // Schnee
+    if (frameCount % 2 === 0) spawnSnowflake();
+    snowflakes.forEach(s => {
+      drawSnowflake(s);
+      s.x += s.speedX;
+      s.y += s.speedY;
+    });
+    while (snowflakes.length && snowflakes[0].y > GAME_HEIGHT + 10) snowflakes.shift();
+  }
 
   // Weißer Rahmen
   ctx.strokeStyle = "#fff";
@@ -304,6 +421,7 @@ function gameLoop() {
         blink--;
         if (blink > 0) setTimeout(blinkBird, 65);
         else {
+          // Vogel zurück in die Mitte setzen!
           birdY = GAME_HEIGHT / 2 - BIRD_SIZE / 2;
           birdVelocity = 0;
           isBlinking = false;
@@ -332,7 +450,3 @@ function gameLoop() {
 
   frameCount++;
 }
-
-// ==== SPIEL START ====
-initGame();
-loopId = requestAnimationFrame(gameLoop);
