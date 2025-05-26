@@ -29,7 +29,6 @@ const stars = [];
 const snowflakes = [];
 const flames = [];
 const leaves = [];
-const heartPath = "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z";
 
 // Sahara-Deko
 const dunes = [
@@ -50,20 +49,6 @@ const setupOverlay = document.getElementById('setupOverlay');
 const startBtn = document.getElementById('startBtn');
 const themeRadios = document.querySelectorAll('input[name="theme"]');
 const headRadios = document.querySelectorAll('input[name="birdhead"]');
-
-// Theme-Auswahl-Karten: Visuelles Feedback auf Auswahl
-document.querySelectorAll('.theme-card').forEach(card => {
-  card.addEventListener('click', function() {
-    setTimeout(() => {
-      document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
-      if (card.querySelector('input[type="radio"]').checked) card.classList.add('active');
-    }, 30);
-  });
-});
-// Aktivierungs-Status beim Laden setzen
-window.addEventListener('DOMContentLoaded', () => {
-  document.querySelector('.theme-card input[type="radio"]:checked').parentElement.classList.add('active');
-});
 
 // Startknopf
 startBtn.addEventListener('click', () => {
@@ -346,7 +331,7 @@ function drawLives() {
   const livesDiv = document.getElementById('lives');
   livesDiv.innerHTML = '';
   for (let i = 0; i < lives; i++) {
-    livesDiv.innerHTML += `<svg width="26" height="24" viewBox="0 0 24 24"><path d="${heartPath}" fill="#ff2777" stroke="#fff" stroke-width="2"/></svg>`;
+    livesDiv.innerHTML += `<svg width="26" height="24" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z" fill="#ff2777" stroke="#fff" stroke-width="2"/></svg>`;
   }
 }
 
@@ -386,24 +371,31 @@ function drawMarioPipe(x, y, width, height, isTop) {
   ctx.restore();
 }
 
-// ==== KOPF UND FLÜGEL ====
+// ==== KOPF UND FLÜGEL (mit richtigen Flügeln) ====
 function drawBirdWithWings(x, y) {
-  let flap = Math.sin(frameCount * 0.26) * 13;
+  // Linker Flügel (wie ein heller, federförmiger Flügel)
   ctx.save();
-  ctx.globalAlpha = 0.93;
-  ctx.strokeStyle = "#fff";
-  ctx.lineWidth = 7;
-  ctx.lineCap = "round";
+  ctx.translate(x + 7, y + 28);
+  ctx.rotate(-0.18 + Math.sin(frameCount * 0.22) * 0.16);
   ctx.beginPath();
-  ctx.moveTo(x + 6, y + 26);
-  ctx.lineTo(x - 24, y + 22 + flap);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(x + BIRD_SIZE - 6, y + 26);
-  ctx.lineTo(x + BIRD_SIZE + 24, y + 22 + flap);
-  ctx.stroke();
-  ctx.globalAlpha = 1;
+  ctx.ellipse(0, 0, 23, 15, Math.PI / 5, 0, 2 * Math.PI);
+  ctx.fillStyle = "#fffbe9";
+  ctx.globalAlpha = 0.74;
+  ctx.fill();
   ctx.restore();
+
+  // Rechter Flügel
+  ctx.save();
+  ctx.translate(x + BIRD_SIZE - 7, y + 28);
+  ctx.rotate(0.18 - Math.sin(frameCount * 0.22) * 0.16);
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 23, 15, -Math.PI / 5, 0, 2 * Math.PI);
+  ctx.fillStyle = "#fffbe9";
+  ctx.globalAlpha = 0.74;
+  ctx.fill();
+  ctx.restore();
+
+  // Bird Head
   ctx.drawImage(birdImg, x, y, BIRD_SIZE, BIRD_SIZE);
 }
 
