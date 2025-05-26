@@ -64,14 +64,19 @@ h1 {
   text-align: center;
 }
 
-/* Theme-Auswahl */
-.theme-select {
-  display: flex;
-  gap: 18px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 10px;
+/* Theme-Auswahl: Zwei Reihen, mittig */
+.theme-select.theme-select-row {
+  flex-direction: column;
+  gap: 8px;
 }
+
+.theme-select.theme-select-row > div {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: center;
+}
+
 .theme-select label {
   display: flex;
   flex-direction: column;
@@ -162,6 +167,7 @@ h1 {
   background: #08774d;
 }
 
+/* Mobile Optimierung */
 @media (max-width: 500px) {
   #gameCanvas {
     max-width: 98vw;
@@ -178,5 +184,8 @@ h1 {
   }
   #setupOverlay {
     gap: 16px;
+  }
+  .theme-select.theme-select-row > div {
+    gap: 10px;
   }
 }
