@@ -3,12 +3,12 @@ const GAME_WIDTH = 320;
 const GAME_HEIGHT = 480;
 const BIRD_SIZE = 50;
 const BIRD_X = 40;
-const INITIAL_GAP = 210;            // Start-Lücke
-const MIN_GAP = 90;                 // Engste Lücke
-const GAP_PER_POINT = 2.5;          // Pro Punkt verringert sich die Lücke um 2.5px
+const INITIAL_GAP = 210;
+const MIN_GAP = 90;
+const GAP_PER_POINT = 2.5;
 const PIPE_WIDTH = 58;
-const PIPE_SPEED = 1.9;             // Rohr-Geschwindigkeit
-const SPRUNGKRAFT = -6.2;           // Sprungkraft (fein)
+const PIPE_SPEED = 1.9;
+const SPRUNGKRAFT = -6.2;
 const MAX_LIVES = 3;
 
 // ==== CANVAS ====
@@ -17,10 +17,11 @@ const ctx = canvas.getContext('2d');
 let loopId = null;
 
 // ==== BILDER ====
+// ACHTUNG: Groß-/Kleinschreibung und Ordnerstruktur GENAU beachten!
 const birdImg = new Image();
 birdImg.src = 'Images/Birdhead.png';
 
-// ==== Deko-Arrays ====
+// ==== DEKO-ARRAYS ====
 const clouds = [];
 const flowers = [];
 const heartPath = "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.09C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z";
@@ -185,9 +186,8 @@ function drawMarioPipe(x, y, width, height, isTop) {
   ctx.restore();
 }
 
-// ==== KOPF UND FLÜGEL (ohne Maske, ohne Kreis, ohne Viereck) ====
+// ==== KOPF UND FLÜGEL ====
 function drawBirdWithWings(x, y) {
-  // Flügel hinter dem Kopf, KEINE Maske!
   let flap = Math.sin(frameCount * 0.26) * 13;
   ctx.save();
   ctx.globalAlpha = 0.93;
@@ -206,8 +206,7 @@ function drawBirdWithWings(x, y) {
   ctx.stroke();
   ctx.globalAlpha = 1;
   ctx.restore();
-
-  // Nur den Kopf, wie er ist – KEIN Kreis, KEIN Viereck!
+  // Birdhead einfügen
   ctx.drawImage(birdImg, x, y, BIRD_SIZE, BIRD_SIZE);
 }
 
@@ -250,7 +249,7 @@ function gameLoop() {
       }
       p.scored = true;
 
-      // Gap wird mit jedem Punkt etwas kleiner:
+      // Lücke verringern
       let newGap = INITIAL_GAP - score * GAP_PER_POINT;
       gap = Math.max(MIN_GAP, newGap);
     }
@@ -266,11 +265,10 @@ function gameLoop() {
     birdY += birdVelocity;
   }
 
-  // Bird mit Flügeln, nur Bild
+  // Bird zeichnen
   if (birdImg.complete && birdImg.naturalHeight > 0) {
     drawBirdWithWings(BIRD_X, birdY);
   } else {
-    // Platzhalter, falls Bild nicht da
     ctx.fillStyle = "#fff";
     ctx.fillRect(BIRD_X, birdY, BIRD_SIZE, BIRD_SIZE);
   }
@@ -340,4 +338,4 @@ function gameLoop() {
 
 // ==== SPIEL START ====
 initGame();
-loopId = requestAnimationFrame(gameLoop);
+loopId = requestAnim
