@@ -49,9 +49,23 @@ let birdY, birdVelocity, pipes, score, highscore, gap, lives, gameOver, started,
 const setupOverlay = document.getElementById('setupOverlay');
 const startBtn = document.getElementById('startBtn');
 const themeRadios = document.querySelectorAll('input[name="theme"]');
-// Radio-Auswahl für Birdhead (mit Bild)
 const headRadios = document.querySelectorAll('input[name="birdhead"]');
 
+// Theme-Auswahl-Karten: Visuelles Feedback auf Auswahl
+document.querySelectorAll('.theme-card').forEach(card => {
+  card.addEventListener('click', function() {
+    setTimeout(() => {
+      document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
+      if (card.querySelector('input[type="radio"]').checked) card.classList.add('active');
+    }, 30);
+  });
+});
+// Aktivierungs-Status beim Laden setzen
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelector('.theme-card input[type="radio"]:checked').parentElement.classList.add('active');
+});
+
+// Startknopf
 startBtn.addEventListener('click', () => {
   themeRadios.forEach(radio => { if (radio.checked) currentTheme = radio.value; });
   headRadios.forEach(radio => { if (radio.checked) currentBird = radio.value; });
@@ -294,10 +308,8 @@ function drawLeaf(l) {
 
 // Sahara (Sand, Pyramiden)
 function drawSaharaBackground() {
-  // Himmel
   ctx.fillStyle = "#fef6b0";
   ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-  // Dünen
   dunes.forEach(d => {
     ctx.beginPath();
     ctx.moveTo(d.x, GAME_HEIGHT);
@@ -309,7 +321,6 @@ function drawSaharaBackground() {
     ctx.fill();
     ctx.globalAlpha = 1;
   });
-  // Pyramiden
   pyramids.forEach(p => {
     ctx.beginPath();
     ctx.moveTo(p.x, p.y + p.s);
@@ -324,7 +335,6 @@ function drawSaharaBackground() {
     ctx.stroke();
     ctx.globalAlpha = 1;
   });
-  // Sandvordergrund
   ctx.fillStyle = "#fff7b7";
   ctx.globalAlpha = 0.76;
   ctx.fillRect(0, GAME_HEIGHT - 45, GAME_WIDTH, 45);
@@ -376,7 +386,7 @@ function drawMarioPipe(x, y, width, height, isTop) {
   ctx.restore();
 }
 
-// ==== KOPF UND FLÜGEL (ohne Maske, kein Kreis, kein Viereck) ====
+// ==== KOPF UND FLÜGEL ====
 function drawBirdWithWings(x, y) {
   let flap = Math.sin(frameCount * 0.26) * 13;
   ctx.save();
