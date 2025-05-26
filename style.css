@@ -18,12 +18,17 @@ body {
   gap: 14px;
 }
 
-h1 {
-  margin-bottom: 0;
+h1, .setup-title {
   text-align: center;
   color: #fff;
-  text-shadow: 1px 2px 8px #218bff;
+  text-shadow: 1px 2px 8px #218bff88;
   letter-spacing: 1px;
+}
+
+.setup-title {
+  font-size: 2em;
+  margin: 0 0 18px 0;
+  padding-top: 8px;
 }
 
 #gameFrame {
@@ -55,7 +60,7 @@ h1 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 34px;
+  gap: 8px;
 }
 
 .setup-section {
@@ -63,75 +68,45 @@ h1 {
   text-align: center;
 }
 
-.choose-title {
-  font-size: 1.18em;
-  font-weight: 600;
-  margin-bottom: 12px;
-  letter-spacing: 0.5px;
+.setup-section.small-section {
+  margin-bottom: 7px;
 }
 
-/* Theme-Auswahl UNTEREINANDER als Karten */
-.theme-list {
+/* Theme-Auswahl schmal, untereinander */
+.theme-radio-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  width: 330px;
-  max-width: 96vw;
-  margin: 0 auto 8px auto;
-  align-items: center;
-}
-
-.theme-card {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  background: #232c39;
-  border-radius: 14px;
-  box-shadow: 0 2px 12px #0005;
-  padding: 7px 14px;
-  cursor: pointer;
-  position: relative;
-  transition: border 0.13s, box-shadow 0.15s, background 0.12s;
-  border: 2.4px solid transparent;
-  min-width: 200px;
-  max-width: 330px;
-  width: 100%;
-}
-.theme-card.active,
-.theme-card input[type="radio"]:checked + .theme-icon {
-  border-color: #218bff;
-  background: #294576;
-  box-shadow: 0 4px 18px #218bff44;
-}
-.theme-card input[type="radio"] {
-  accent-color: #218bff;
-  margin-right: 8px;
-}
-.theme-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #fff2;
-  box-shadow: 0 1px 8px #1114;
-  margin-right: 8px;
-}
-.theme-label {
+  gap: 5px;
+  align-items: flex-start;
+  margin: 0 auto;
+  padding: 2px 0 10px 0;
   font-size: 1.12em;
-  color: #fff;
+  width: fit-content;
+}
+.theme-radio-list label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
   font-weight: 500;
-  text-shadow: 0 1px 7px #122;
-  letter-spacing: 0.4px;
-  margin-left: 6px;
+  padding: 2px 6px;
+  border-radius: 7px;
+  transition: background 0.18s;
+}
+.theme-radio-list input[type="radio"] {
+  accent-color: #218bff;
+}
+.theme-radio-list label:hover,
+.theme-radio-list input[type="radio"]:focus-visible + label {
+  background: #2233;
 }
 
 /* Kopf-Auswahl mit Bildern */
 .head-select {
   display: flex;
-  gap: 24px;
+  gap: 23px;
   justify-content: center;
+  margin-top: 6px;
 }
 .head-select label {
   display: flex;
@@ -139,12 +114,13 @@ h1 {
   align-items: center;
   font-size: 1em;
   cursor: pointer;
-  gap: 3px;
+  gap: 2px;
   user-select: none;
+  padding: 0 6px;
 }
 .head-select input[type="radio"] {
   accent-color: #218bff;
-  margin-bottom: 2px;
+  margin-bottom: 1.5px;
 }
 .head-preview {
   display: block;
@@ -160,7 +136,7 @@ h1 {
 
 /* Buttons */
 #startBtn {
-  margin-top: 14px;
+  margin-top: 18px;
   font-size: 1.23em;
   font-weight: 600;
   padding: 10px 34px;
@@ -230,18 +206,16 @@ h1 {
     height: 30px;
   }
   #setupOverlay {
-    gap: 16px;
-  }
-  .theme-list {
-    width: 99vw;
-    max-width: 99vw;
-  }
-  .theme-card {
-    min-width: 0;
-    max-width: 99vw;
-    padding: 7px 5vw;
+    gap: 8px;
+    padding-top: 15px;
   }
   .head-select {
     gap: 10px;
+  }
+  .setup-title {
+    font-size: 1.44em;
+  }
+  .theme-radio-list {
+    font-size: 1em;
   }
 }
