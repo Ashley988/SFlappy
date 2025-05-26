@@ -2,13 +2,51 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="viewport" content="width=320, initial-scale=1.0, user-scalable=no">
   <title>Flappy Birdhead</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="game-container">
-    <h1 style="color:white; text-shadow: 1px 1px 8px #188;">Flappy Birdhead</h1>
+    <h1>Flappy Birdhead</h1>
+    <!-- SETUP OVERLAY -->
+    <div id="setupOverlay">
+      <div class="setup-section">
+        <label>Thema wählen:</label>
+        <div class="theme-select">
+          <label>
+            <input type="radio" name="theme" value="spring" checked>
+            Frühling
+          </label>
+          <label>
+            <input type="radio" name="theme" value="galaxy">
+            Galaxy
+          </label>
+          <label>
+            <input type="radio" name="theme" value="winter">
+            Winter
+          </label>
+        </div>
+      </div>
+      <div class="setup-section">
+        <label>Kopf wählen:</label>
+        <div class="head-select">
+          <label>
+            <input type="radio" name="birdhead" value="Birdhead.png" checked>
+            <img src="Birdhead.png" alt="Sopian" class="head-preview">
+            Sopian
+          </label>
+          <label>
+            <input type="radio" name="birdhead" value="aslikopf.png">
+            <img src="aslikopf.png" alt="Asli" class="head-preview">
+            Asli
+          </label>
+        </div>
+      </div>
+      <button id="startBtn">Spiel starten</button>
+    </div>
+
+    <!-- GAME CANVAS -->
     <div id="gameFrame">
       <canvas id="gameCanvas" width="320" height="480"></canvas>
     </div>
