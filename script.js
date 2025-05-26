@@ -4,6 +4,9 @@ let currentBird = "Birdhead.png";
 let birdImg = new Image();
 birdImg.src = currentBird;
 
+// ==== NEU: Theme-Dropdown ====
+const themeSelect = document.getElementById('themeSelect');
+
 // ==== SPIEL-KONSTANTEN ====
 const GAME_WIDTH = 320;
 const GAME_HEIGHT = 480;
@@ -47,12 +50,11 @@ let birdY, birdVelocity, pipes, score, highscore, gap, lives, gameOver, started,
 // ==== SETUP OVERLAY ====
 const setupOverlay = document.getElementById('setupOverlay');
 const startBtn = document.getElementById('startBtn');
-const themeRadios = document.querySelectorAll('input[name="theme"]');
 const headRadios = document.querySelectorAll('input[name="birdhead"]');
 
 // Startknopf
 startBtn.addEventListener('click', () => {
-  themeRadios.forEach(radio => { if (radio.checked) currentTheme = radio.value; });
+  currentTheme = themeSelect.value;
   headRadios.forEach(radio => { if (radio.checked) currentBird = radio.value; });
   birdImg.src = currentBird;
   setupOverlay.style.display = "none";
