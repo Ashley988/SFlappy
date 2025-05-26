@@ -39,6 +39,7 @@ const themeRadios = document.querySelectorAll('input[name="theme"]');
 const headRadios = document.querySelectorAll('input[name="birdhead"]');
 
 startBtn.addEventListener('click', () => {
+  // Theme & Bird auswählen
   themeRadios.forEach(radio => { if (radio.checked) currentTheme = radio.value; });
   headRadios.forEach(radio => { if (radio.checked) currentBird = radio.value; });
   birdImg.src = currentBird;
@@ -440,4 +441,5 @@ function gameLoop() {
   }
 
   frameCount++;
-}
+} 
+
