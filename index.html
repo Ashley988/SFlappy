@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=320, initial-scale=1.0, user-scalable=no">
+  <title>Flappy Birdhead Deluxe</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-container">
+    <div id="gameFrame">
+      <canvas id="gameCanvas" width="320" height="480"></canvas>
+    </div>
+    <div class="scoreboard">
+      <span>Punkte: <span id="score">0</span></span> |
+      <span>Highscore: <span id="highscore">0</span></span>
+    </div>
+    <div id="lives"></div>
+    <button id="jumpBtn">Springen</button>
+    <button id="newGameBtn" style="display: none;">Neues Spiel</button>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,113 @@
+body {
+  background: #4fbfff;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+#gameFrame {
+  background: #7ecfff;
+  border: 5px solid #fff;
+  border-radius: 24px;
+  margin: 20px 0 8px 0;
+  box-shadow: 0 2px 30px #11c4f89c;
+  display: flex;
+  justify-content: center;
+}
+
+#gameCanvas {
+  display: block;
+  background: transparent;
+  border-radius: 14px;
+  width: 320px;
+  height: 480px;
+  max-width: 96vw;
+  max-height: 67vh;
+}
+
+.scoreboard {
+  font-size: 1.22rem;
+  margin-bottom: 9px;
+  color: #fff;
+  text-shadow: 1px 1px 7px #14a7e599;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+#lives {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 10px;
+  min-height: 24px;
+  user-select: none;
+}
+
+/* Buttons gestylt & mittig */
+#jumpBtn,
+#newGameBtn {
+  background: linear-gradient(90deg, #22c1c3 10%, #1fa2ff 90%);
+  color: #fff;
+  font-size: 1.5rem;
+  border: 0;
+  border-radius: 36px;
+  padding: 16px 44px;
+  margin-bottom: 12px;
+  margin-top: 0;
+  box-shadow: 0 3px 20px #2fd9ff8e;
+  cursor: pointer;
+  outline: none;
+  width: 80vw;
+  max-width: 340px;
+  font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+  letter-spacing: 1px;
+  transition: background 0.19s, color 0.19s, box-shadow 0.22s;
+  display: block;
+}
+#jumpBtn:active,
+#newGameBtn:active {
+  background: linear-gradient(90deg, #00eaff 20%, #45ee96 90%);
+  color: #222;
+  box-shadow: 0 1px 6px #1dffb18c;
+}
+
+#newGameBtn {
+  margin-top: 0;
+  margin-bottom: 24px;
+  background: linear-gradient(90deg, #fe9063 10%, #f94848 90%);
+}
+#newGameBtn:active {
+  background: linear-gradient(90deg, #f94848 10%, #fe9063 90%);
+  color: #fff;
+}
+
+/* Mobile Optimierung */
+@media (max-width: 500px) {
+  #gameCanvas {
+    width: 97vw;
+    height: 64vw;
+    max-width: 99vw;
+    max-height: 78vw;
+  }
+  #gameFrame {
+    border-radius: 8vw;
+  }
+  #jumpBtn,
+  #newGameBtn {
+    font-size: 5vw;
+    padding: 7vw 0;
+    border-radius: 8vw;
+    max-width: 97vw;
+  }
+}
