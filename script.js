@@ -338,4 +338,4 @@ function gameLoop() {
 
 // ==== SPIEL START ====
 initGame();
-loopId = requestAnim
+loopId = requestAnimationFrame(gameLoop);
