@@ -50,7 +50,6 @@ h1, .setup-title {
   border-radius: 12px;
 }
 
-/* Overlay (Startmaske) */
 #setupOverlay {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
@@ -67,38 +66,33 @@ h1, .setup-title {
   margin-bottom: 18px;
   text-align: center;
 }
-
 .setup-section.small-section {
   margin-bottom: 7px;
 }
+.choose-title {
+  font-size: 1.10em;
+  font-weight: 600;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
 
-/* Theme-Auswahl schmal, untereinander */
-.theme-radio-list {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  align-items: flex-start;
-  margin: 0 auto;
-  padding: 2px 0 10px 0;
-  font-size: 1.12em;
-  width: fit-content;
+.theme-dropdown {
+  margin: 7px 0 0 0;
+  font-size: 1.08em;
+  padding: 7px 16px 7px 8px;
+  border-radius: 8px;
+  border: 1.6px solid #218bff;
+  background: #232c39;
+  color: #fff;
+  font-family: inherit;
+  outline: none;
+  box-shadow: 0 1px 9px #0002;
+  width: 170px;
+  appearance: none;
 }
-.theme-radio-list label {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  cursor: pointer;
-  font-weight: 500;
-  padding: 2px 6px;
-  border-radius: 7px;
-  transition: background 0.18s;
-}
-.theme-radio-list input[type="radio"] {
-  accent-color: #218bff;
-}
-.theme-radio-list label:hover,
-.theme-radio-list input[type="radio"]:focus-visible + label {
-  background: #2233;
+.theme-dropdown:focus {
+  border-color: #57bcff;
+  background: #25344a;
 }
 
 /* Kopf-Auswahl mit Bildern */
@@ -134,7 +128,6 @@ h1, .setup-title {
   margin: 4px auto 2px auto;
 }
 
-/* Buttons */
 #startBtn {
   margin-top: 18px;
   font-size: 1.23em;
@@ -152,7 +145,6 @@ h1, .setup-title {
   background: #105a92;
 }
 
-/* Scoreboard & Buttons */
 .scoreboard {
   display: flex;
   gap: 12px;
@@ -190,7 +182,6 @@ h1, .setup-title {
   background: #08774d;
 }
 
-/* Mobile Optimierung */
 @media (max-width: 500px) {
   #gameCanvas {
     max-width: 98vw;
@@ -215,7 +206,8 @@ h1, .setup-title {
   .setup-title {
     font-size: 1.44em;
   }
-  .theme-radio-list {
-    font-size: 1em;
+  .theme-dropdown {
+    width: 99vw;
+    max-width: 200px;
   }
 }
