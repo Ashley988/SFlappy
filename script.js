@@ -17,7 +17,6 @@ const ctx = canvas.getContext('2d');
 let loopId = null;
 
 // ==== BILDER ====
-// ACHTUNG: Groß-/Kleinschreibung und Ordnerstruktur GENAU beachten!
 const birdImg = new Image();
 birdImg.src = 'Birdhead.png';
 
@@ -186,7 +185,7 @@ function drawMarioPipe(x, y, width, height, isTop) {
   ctx.restore();
 }
 
-// ==== KOPF UND FLÜGEL ====
+// ==== KOPF UND FLÜGEL (ohne Maske, kein Kreis, kein Viereck) ====
 function drawBirdWithWings(x, y) {
   let flap = Math.sin(frameCount * 0.26) * 13;
   ctx.save();
@@ -206,7 +205,7 @@ function drawBirdWithWings(x, y) {
   ctx.stroke();
   ctx.globalAlpha = 1;
   ctx.restore();
-  // Birdhead einfügen
+
   ctx.drawImage(birdImg, x, y, BIRD_SIZE, BIRD_SIZE);
 }
 
@@ -248,8 +247,6 @@ function gameLoop() {
         localStorage.setItem('bird_highscore', highscore);
       }
       p.scored = true;
-
-      // Lücke verringern
       let newGap = INITIAL_GAP - score * GAP_PER_POINT;
       gap = Math.max(MIN_GAP, newGap);
     }
@@ -265,7 +262,7 @@ function gameLoop() {
     birdY += birdVelocity;
   }
 
-  // Bird zeichnen
+  // Bird mit Flügeln, nur Bild
   if (birdImg.complete && birdImg.naturalHeight > 0) {
     drawBirdWithWings(BIRD_X, birdY);
   } else {
